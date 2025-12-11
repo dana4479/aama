@@ -1,145 +1,183 @@
-const inputList = document.getElementById('inputList');
-const renderArea = document.getElementById('renderArea');
-const mainTitleInput = document.getElementById('mainTitleInput');
-const renderMainTitle = document.getElementById('renderMainTitle');
-const titleColor = document.getElementById('titleColor');
-const captureTarget = document.getElementById('captureTarget');
+// --- 1. 초기 데이터 및 상태 설정 ---
+let cardData = {
+    mainTitle: "국서 안내",
+    titleSize: 2.8,
+    subTitleSize: 1.1,
+    titleColor: "#0021b0",
+    sections: [
+        { 
+            title: "3. 사무행정국", 
+            desc: "교육계열의 전반적인 행정 업무를 담당합니다.", 
+            list: "- 재정 관리, 예결산안 작성\n- 회의록 관리" 
+        },
+        { 
+            title: "4. 홍보소통국", 
+            desc: "학우들에게 행사와 소식을 알리는 업무를 담당합니다.", 
+            list: "- 인스타그램 카드뉴스 제작\n- 링크트리 관리" 
+        }
+    ]
+};
 
-// 크기 조절 요소들
-const titleSizeInput = document.getElementById('titleSize');
-const titleSizeValue = document.getElementById('titleSizeValue');
-const subTitleSizeInput = document.getElementById('subTitleSize'); // [추가됨]
-const subTitleSizeValue = document.getElementById('subTitleSizeValue'); // [추가됨]
+// --- 2. 초기 렌더링 실행 ---
+window.onload = function() {
+    renderInputs();   // 입력창 그리기
+    renderPreview();  // 미리보기 그리기
+    syncGlobalSettings(); // 슬라이더 등 설정값 동기화
+};
 
-let sections = [
-    { 
-        title: "3. 사무행정국", 
-        desc: "교육계열의 전반적인 행정 업무를 담당합니다.", 
-        list: "- 재정 관리, 예결산안 작성\n- 회의록 관리\n- 공개문서 관리" 
-    },
-    { 
-        title: "4. 홍보소통국", 
-        desc: "집행 사항과 행사 등을 학우에게 알리는 업무입니다.", 
-        list: "- 인스타그램 홍보 카드뉴스 제작\n- 교육계열 달력 제작\n- 링크트리 관리" 
-    }
-];
-
-// 초기화
-renderAll();
-
-// 1. 메인 타이틀 변경
-mainTitleInput.addEventListener('input', (e) => {
-    renderMainTitle.innerText = e.target.value;
-});
-titleColor.addEventListener('input', (e) => {
-    renderMainTitle.style.color = e.target.value;
-});
-
-// 2. 메인 타이틀 크기 조절
-titleSizeInput.addEventListener('input', (e) => {
-    const size = e.target.value;
-    renderMainTitle.style.fontSize = `${size}rem`;
-    titleSizeValue.innerText = `(${size}rem)`;
-});
-
-// [추가됨] 3. 소제목 크기 조절
-subTitleSizeInput.addEventListener('input', (e) => {
-    const size = e.target.value;
-    subTitleSizeValue.innerText = `(${size}rem)`;
+// 설정값 UI 동기화 (새로고침 시 값 유지용)
+function syncGlobalSettings() {
+    document.getElementById('mainTitleInput').value = cardData.mainTitle;
+    document.getElementById('titleSize').value = cardData.titleSize;
+    document.getElementById('subTitleSize').value = cardData.subTitleSize;
+    document.getElementById('titleColor').value = cardData.titleColor;
     
-    // 현재 있는 모든 소제목의 크기를 변경
-    const headers = document.querySelectorAll('.section-header');
-    headers.forEach(header => {
-        header.style.fontSize = `${size}rem`;
-    });
-});
-
-// 4. 섹션 관리 함수들
-function addSection() {
-    sections.push({ title: "", desc: "", list: "" });
-    renderAll();
+    // 텍스트 표시 업데이트
+    document.getElementById('titleSizeValue').innerText = `(${cardData.titleSize}rem)`;
+    document.getElementById('subTitleSizeValue').innerText = `(${cardData.subTitleSize}rem)`;
 }
 
-function removeSection(index) {
-    sections.splice(index, 1);
-    renderAll();
-}
 
-function updateSection(index, key, value) {
-    sections[index][key] = value;
-    renderPreview(); 
-}
+// --- 3. 이벤트 핸들러 (사용자 입력 처리) ---
 
-// 5. 렌더링
-function renderAll() {
-    renderInputs();
+// 메인 타이틀 변경
+window.updateMainTitle = function(val) {
+    cardData.mainTitle = val;
+    renderPreview(); // 미리보기만 갱신
+};
+
+// 메인 타이틀 크기 변경
+window.updateTitleSize = function(val) {
+    cardData.titleSize = val;
+    document.getElementById('titleSizeValue').innerText = `(${val}rem)`;
     renderPreview();
-}
+};
 
+// 소제목 크기 변경
+window.updateSubTitleSize = function(val) {
+    cardData.subTitleSize = val;
+    document.getElementById('subTitleSizeValue').innerText = `(${val}rem)`;
+    renderPreview();
+};
+
+// 타이틀 색상 변경
+window.updateTitleColor = function(val) {
+    cardData.titleColor = val;
+    renderPreview();
+};
+
+// 섹션 내용 변경 (인덱스, 키, 값)
+window.updateSectionData = function(index, key, val) {
+    cardData.sections[index][key] = val;
+    renderPreview(); // 중요: 입력창을 다시 그리지 않고 미리보기만 갱신!
+};
+
+// 섹션 추가
+window.addSection = function() {
+    cardData.sections.push({ title: "", desc: "", list: "" });
+    renderInputs(); // 입력창 개수가 바뀌었으니 다시 그림
+    renderPreview();
+};
+
+// 섹션 삭제
+window.removeSection = function(index) {
+    cardData.sections.splice(index, 1);
+    renderInputs(); // 입력창 개수가 바뀌었으니 다시 그림
+    renderPreview();
+};
+
+
+// --- 4. 렌더링 함수 (화면 그리기) ---
+
+// [왼쪽] 입력창 렌더링
 function renderInputs() {
-    inputList.innerHTML = '';
-    sections.forEach((section, index) => {
+    const inputList = document.getElementById('inputList');
+    inputList.innerHTML = ''; // 초기화
+
+    cardData.sections.forEach((section, index) => {
         const div = document.createElement('div');
         div.className = 'input-item';
         div.innerHTML = `
-            <h4>섹션 ${index + 1}</h4>
-            <input type="text" placeholder="소제목 (예: 3. 사무행정국)" value="${section.title}" oninput="updateSection(${index}, 'title', this.value)">
-            <textarea rows="2" placeholder="설명글 (예: 전반적인 행정 업무...)" oninput="updateSection(${index}, 'desc', this.value)">${section.desc}</textarea>
-            <textarea rows="3" placeholder="리스트 항목 (줄바꿈으로 구분)" oninput="updateSection(${index}, 'list', this.value)">${section.list}</textarea>
-            <button class="remove-btn" onclick="removeSection(${index})"><i class="fas fa-trash"></i></button>
+            <button class="remove-btn" onclick="removeSection(${index})"><i class="fas fa-times"></i></button>
+            
+            <label>소제목 (부서명)</label>
+            <input type="text" value="${section.title}" 
+                   placeholder="예: 3. 사무행정국"
+                   oninput="updateSectionData(${index}, 'title', this.value)">
+            
+            <label>설명글</label>
+            <textarea placeholder="설명 내용을 입력하세요"
+                      oninput="updateSectionData(${index}, 'desc', this.value)">${section.desc}</textarea>
+            
+            <label>리스트 (줄바꿈으로 구분)</label>
+            <textarea placeholder="- 항목 1\n- 항목 2"
+                      rows="3"
+                      oninput="updateSectionData(${index}, 'list', this.value)">${section.list}</textarea>
         `;
         inputList.appendChild(div);
     });
 }
 
+// [오른쪽] 미리보기 렌더링
 function renderPreview() {
-    renderArea.innerHTML = '';
-    
-    // 현재 설정된 소제목 크기 가져오기
-    const currentSubSize = subTitleSizeInput.value;
+    // 1. 메인 타이틀 적용
+    const mainTitle = document.getElementById('renderMainTitle');
+    mainTitle.innerText = cardData.mainTitle;
+    mainTitle.style.fontSize = `${cardData.titleSize}rem`;
+    mainTitle.style.color = cardData.titleColor;
 
-    sections.forEach(section => {
+    // 2. 섹션 리스트 적용
+    const renderArea = document.getElementById('renderArea');
+    renderArea.innerHTML = ''; // 초기화
+
+    cardData.sections.forEach(section => {
         const wrapper = document.createElement('div');
         wrapper.className = 'section-wrapper';
-        
-        const listItems = section.list.split('\n').filter(item => item.trim() !== '');
+
+        // 리스트 줄바꿈 처리
+        const listItems = section.list.split('\n').filter(t => t.trim() !== '');
         const listHtml = listItems.map(item => {
-            const cleanItem = item.replace(/^-\s*/, ''); 
+            const cleanItem = item.replace(/^-\s*/, ''); // 앞에 -가 있다면 제거 (CSS로 붙임)
             return `<li>${cleanItem}</li>`;
         }).join('');
 
-        // 소제목 렌더링 (크기 스타일 적용 포함)
+        // 소제목 HTML (값이 있을 때만 생성)
         let headerHtml = '';
-        if (section.title) {
-            headerHtml = `<div class="section-header" style="font-size: ${currentSubSize}rem;">${section.title}</div>`;
+        if(section.title) {
+            headerHtml = `
+                <div class="section-header-box" style="font-size: ${cardData.subTitleSize}rem;">
+                    ${section.title}
+                </div>
+            `;
         }
 
+        // 박스 HTML
         wrapper.innerHTML = `
             ${headerHtml}
-            <div class="section-box">
+            <div class="section-content-box">
                 ${section.desc ? `<div class="box-desc">${section.desc}</div>` : ''}
-                <ul class="box-list">
-                    ${listHtml}
-                </ul>
+                ${listHtml ? `<ul class="box-list">${listHtml}</ul>` : ''}
             </div>
         `;
-        
+
         renderArea.appendChild(wrapper);
     });
 }
 
-// 이미지 다운로드
-document.getElementById('downloadBtn').addEventListener('click', () => {
-    window.scrollTo(0,0);
-    html2canvas(captureTarget, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#f8f9fa"
+
+// --- 5. 이미지 다운로드 ---
+window.downloadImage = function() {
+    const target = document.getElementById('captureTarget');
+    window.scrollTo(0,0); // 스크롤 이슈 방지
+
+    html2canvas(target, {
+        scale: 2, // 2배 해상도 (선명하게)
+        backgroundColor: "#f8f9fa", // 배경색 강제 지정
+        useCORS: true
     }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'phoning-notice-card.jpg';
+        link.download = `phoning_card_${Date.now()}.jpg`;
         link.href = canvas.toDataURL('image/jpeg', 0.95);
         link.click();
     });
-});
+};

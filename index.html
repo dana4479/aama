@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phoning 스타일 카드뉴스 에디터</title>
+    <title>Phoning Card Maker</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,41 +14,43 @@
         
         <div class="controls">
             <div class="header-area">
-                <h1>📱 Phoning 스타일 에디터</h1>
-                <p>NewJeans Phoning 앱 스타일의 공지사항 만들기</p>
+                <h1>📱 Phoning 에디터</h1>
+                <p>입력하는 즉시 오른쪽 미리보기에 반영됩니다.</p>
             </div>
 
             <div class="global-settings">
-                <h3>1. 메인 타이틀 & 디자인 설정</h3>
-                <input type="text" id="mainTitleInput" placeholder="예: 국서 안내" value="국서 안내">
-                
+                <h3>1. 메인 타이틀 설정</h3>
+                <div class="input-group">
+                    <label>메인 제목 내용</label>
+                    <input type="text" id="mainTitleInput" value="국서 안내" oninput="updateMainTitle(this.value)">
+                </div>
+
                 <div class="slider-group">
-                    <label>메인 타이틀 크기 <span id="titleSizeValue">(2.8rem)</span></label>
-                    <input type="range" id="titleSize" min="1.0" max="5.0" step="0.1" value="2.8">
+                    <label>메인 제목 크기 <span id="titleSizeValue">(2.8rem)</span></label>
+                    <input type="range" id="titleSize" min="1.5" max="5.0" step="0.1" value="2.8" oninput="updateTitleSize(this.value)">
                 </div>
 
                 <div class="slider-group">
                     <label>소제목(부서명) 크기 <span id="subTitleSizeValue">(1.1rem)</span></label>
-                    <input type="range" id="subTitleSize" min="0.8" max="3.0" step="0.1" value="1.1">
+                    <input type="range" id="subTitleSize" min="0.8" max="2.5" step="0.1" value="1.1" oninput="updateSubTitleSize(this.value)">
                 </div>
 
-                <div class="color-pickers">
-                    <label>타이틀 색상 <input type="color" id="titleColor" value="#0021b0"></label>
+                <div class="color-picker-group">
+                    <label>제목 색상</label>
+                    <input type="color" id="titleColor" value="#0021b0" oninput="updateTitleColor(this.value)">
                 </div>
             </div>
 
             <hr class="divider">
 
-            <h3>2. 상세 내용 추가</h3>
-            <div class="control-actions">
-                <button onclick="addSection()" class="add-btn section-btn">
-                    <i class="fas fa-plus-circle"></i> 새 항목(부서/소제목) 추가
-                </button>
+            <div class="list-header">
+                <h3>2. 상세 내용 관리</h3>
+                <button onclick="addSection()" class="add-btn"><i class="fas fa-plus"></i> 추가</button>
             </div>
 
             <div id="inputList" class="input-list"></div>
 
-            <button id="downloadBtn" class="download-btn">⬇️ 이미지로 저장하기 (JPG)</button>
+            <button onclick="downloadImage()" class="download-btn">⬇️ 이미지 저장하기</button>
         </div>
 
         <div class="preview-area">
@@ -56,11 +58,12 @@
                 <div id="captureTarget" class="card-preview">
                     
                     <h1 id="renderMainTitle" class="main-title">국서 안내</h1>
+
                     <div id="renderArea" class="render-area"></div>
                     
                 </div>
             </div>
-            <p class="preview-note">* 내용이 많으면 스크롤하여 확인하세요. (저장은 전체 다 됩니다)</p>
+            <p class="preview-info">미리보기 화면 (실제 저장: 1080x1350 px)</p>
         </div>
 
     </div>

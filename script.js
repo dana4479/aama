@@ -5,7 +5,10 @@ const renderMainTitle = document.getElementById('renderMainTitle');
 const titleColor = document.getElementById('titleColor');
 const captureTarget = document.getElementById('captureTarget');
 
-// 초기 데이터 (예시)
+// [New] 제목 크기 조절 요소
+const titleSizeInput = document.getElementById('titleSize');
+const sizeValueDisplay = document.getElementById('sizeValue');
+
 let sections = [
     { 
         title: "3. 사무행정국", 
@@ -22,7 +25,7 @@ let sections = [
 // 초기화
 renderAll();
 
-// 1. 메인 타이틀 실시간 변경
+// 1. 메인 타이틀 텍스트 & 색상 변경
 mainTitleInput.addEventListener('input', (e) => {
     renderMainTitle.innerText = e.target.value;
 });
@@ -30,13 +33,16 @@ titleColor.addEventListener('input', (e) => {
     renderMainTitle.style.color = e.target.value;
 });
 
+// [New] 1-1. 메인 타이틀 크기 변경
+titleSizeInput.addEventListener('input', (e) => {
+    const size = e.target.value;
+    renderMainTitle.style.fontSize = `${size}rem`;
+    sizeValueDisplay.innerText = `(${size}rem)`;
+});
+
 // 2. 섹션 추가
 function addSection() {
-    sections.push({ 
-        title: "", 
-        desc: "", 
-        list: "" 
-    });
+    sections.push({ title: "", desc: "", list: "" });
     renderAll();
 }
 
@@ -49,16 +55,15 @@ function removeSection(index) {
 // 4. 데이터 업데이트
 function updateSection(index, key, value) {
     sections[index][key] = value;
-    renderPreview(); // 입력창은 유지하고 미리보기만 갱신
+    renderPreview(); 
 }
 
-// 5. 전체 렌더링 (입력창 + 미리보기)
+// 5. 전체 렌더링
 function renderAll() {
     renderInputs();
     renderPreview();
 }
 
-// 입력창 생성
 function renderInputs() {
     inputList.innerHTML = '';
     sections.forEach((section, index) => {
@@ -75,7 +80,6 @@ function renderInputs() {
     });
 }
 
-// 미리보기 생성 (핵심 디자인 적용)
 function renderPreview() {
     renderArea.innerHTML = '';
     
@@ -83,18 +87,19 @@ function renderPreview() {
         const wrapper = document.createElement('div');
         wrapper.className = 'section-wrapper';
         
-        // 줄바꿈으로 리스트 항목 분리
         const listItems = section.list.split('\n').filter(item => item.trim() !== '');
         const listHtml = listItems.map(item => {
-            // 입력할 때 '-'를 안 넣어도 자동으로 넣어주기 위해 제거 후 CSS로 처리
             const cleanItem = item.replace(/^-\s*/, ''); 
-            return `<li>${cleanItem}</li>`;
+            return <li>${cleanItem}</li>;
         }).join('');
 
+        // 소제목이 있을 때만 렌더링
+        const headerHtml = section.title ? <div class="section-header">${section.title}</div> : '';
+
         wrapper.innerHTML = `
-            <div class="section-header">${section.title}</div>
+            ${headerHtml}
             <div class="section-box">
-                ${section.desc ? `<div class="box-desc">${section.desc}</div>` : ''}
+                ${section.desc ? <div class="box-desc">${section.desc}</div> : ''}
                 <ul class="box-list">
                     ${listHtml}
                 </ul>
@@ -107,12 +112,18 @@ function renderPreview() {
 
 // 이미지 다운로드
 document.getElementById('downloadBtn').addEventListener('click', () => {
+    // 캡처 전에 스크롤을 최상단으로 (혹시 모를 잘림 방지)
+    window.scrollTo(0,0);
+    
     html2canvas(captureTarget, {
-        scale: 2
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#f8f9fa" // 투명 배경 방지
     }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'notice-card.jpg';
-        link.href = canvas.toDataURL('image/jpeg', 0.9);
+        link.download = 'phoning-notice-card.jpg';
+        link.href = canvas.toDataURL('image/jpeg', 0.95);
         link.click();
     });
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>비대위 모집공고 스타일 카드뉴스</title>
+    <title>Phoning 스타일 카드뉴스 에디터</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,13 +14,19 @@
         
         <div class="controls">
             <div class="header-area">
-                <h1>📢 공지형 카드뉴스 에디터</h1>
-                <p>구조는 공지사항, 디자인은 Phoning 스타일</p>
+                <h1>📱 Phoning 스타일 에디터</h1>
+                <p>소제목 그라데이션 & 제목 크기 조절 기능 추가됨</p>
             </div>
 
             <div class="global-settings">
                 <h3>1. 메인 타이틀 설정</h3>
                 <input type="text" id="mainTitleInput" placeholder="예: 국서 안내" value="국서 안내">
+                
+                <div class="slider-group">
+                    <label>글자 크기 조절 <span id="sizeValue">(2.8rem)</span></label>
+                    <input type="range" id="titleSize" min="1.0" max="5.0" step="0.1" value="2.8">
+                </div>
+
                 <div class="color-pickers">
                     <label>타이틀 색상 <input type="color" id="titleColor" value="#0021b0"></label>
                 </div>
@@ -41,7 +47,7 @@
         </div>
 
         <div class="preview-area">
-            <div class="preview-wrapper">
+            <div class="preview-scroll-wrapper">
                 <div id="captureTarget" class="card-preview">
                     
                     <h1 id="renderMainTitle" class="main-title">국서 안내</h1>
@@ -50,7 +56,7 @@
                     
                 </div>
             </div>
-            <p class="preview-note">* 인스타그램 4:5 비율 (1080x1350)</p>
+            <p class="preview-note">* 내용이 많아지면 이미지가 길어집니다.</p>
         </div>
 
     </div>

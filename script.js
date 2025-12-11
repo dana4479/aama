@@ -5,9 +5,11 @@ const renderMainTitle = document.getElementById('renderMainTitle');
 const titleColor = document.getElementById('titleColor');
 const captureTarget = document.getElementById('captureTarget');
 
-// [New] 제목 크기 조절 요소
+// 크기 조절 요소들
 const titleSizeInput = document.getElementById('titleSize');
-const sizeValueDisplay = document.getElementById('sizeValue');
+const titleSizeValue = document.getElementById('titleSizeValue');
+const subTitleSizeInput = document.getElementById('subTitleSize'); // [추가됨]
+const subTitleSizeValue = document.getElementById('subTitleSizeValue'); // [추가됨]
 
 let sections = [
     { 
@@ -25,7 +27,7 @@ let sections = [
 // 초기화
 renderAll();
 
-// 1. 메인 타이틀 텍스트 & 색상 변경
+// 1. 메인 타이틀 변경
 mainTitleInput.addEventListener('input', (e) => {
     renderMainTitle.innerText = e.target.value;
 });
@@ -33,32 +35,42 @@ titleColor.addEventListener('input', (e) => {
     renderMainTitle.style.color = e.target.value;
 });
 
-// [New] 1-1. 메인 타이틀 크기 변경
+// 2. 메인 타이틀 크기 조절
 titleSizeInput.addEventListener('input', (e) => {
     const size = e.target.value;
     renderMainTitle.style.fontSize = `${size}rem`;
-    sizeValueDisplay.innerText = `(${size}rem)`;
+    titleSizeValue.innerText = `(${size}rem)`;
 });
 
-// 2. 섹션 추가
+// [추가됨] 3. 소제목 크기 조절
+subTitleSizeInput.addEventListener('input', (e) => {
+    const size = e.target.value;
+    subTitleSizeValue.innerText = `(${size}rem)`;
+    
+    // 현재 있는 모든 소제목의 크기를 변경
+    const headers = document.querySelectorAll('.section-header');
+    headers.forEach(header => {
+        header.style.fontSize = `${size}rem`;
+    });
+});
+
+// 4. 섹션 관리 함수들
 function addSection() {
     sections.push({ title: "", desc: "", list: "" });
     renderAll();
 }
 
-// 3. 섹션 삭제
 function removeSection(index) {
     sections.splice(index, 1);
     renderAll();
 }
 
-// 4. 데이터 업데이트
 function updateSection(index, key, value) {
     sections[index][key] = value;
     renderPreview(); 
 }
 
-// 5. 전체 렌더링
+// 5. 렌더링
 function renderAll() {
     renderInputs();
     renderPreview();
@@ -83,6 +95,9 @@ function renderInputs() {
 function renderPreview() {
     renderArea.innerHTML = '';
     
+    // 현재 설정된 소제목 크기 가져오기
+    const currentSubSize = subTitleSizeInput.value;
+
     sections.forEach(section => {
         const wrapper = document.createElement('div');
         wrapper.className = 'section-wrapper';
@@ -90,16 +105,19 @@ function renderPreview() {
         const listItems = section.list.split('\n').filter(item => item.trim() !== '');
         const listHtml = listItems.map(item => {
             const cleanItem = item.replace(/^-\s*/, ''); 
-            return <li>${cleanItem}</li>;
+            return `<li>${cleanItem}</li>`;
         }).join('');
 
-        // 소제목이 있을 때만 렌더링
-        const headerHtml = section.title ? <div class="section-header">${section.title}</div> : '';
+        // 소제목 렌더링 (크기 스타일 적용 포함)
+        let headerHtml = '';
+        if (section.title) {
+            headerHtml = `<div class="section-header" style="font-size: ${currentSubSize}rem;">${section.title}</div>`;
+        }
 
         wrapper.innerHTML = `
             ${headerHtml}
             <div class="section-box">
-                ${section.desc ? <div class="box-desc">${section.desc}</div> : ''}
+                ${section.desc ? `<div class="box-desc">${section.desc}</div>` : ''}
                 <ul class="box-list">
                     ${listHtml}
                 </ul>
@@ -112,14 +130,12 @@ function renderPreview() {
 
 // 이미지 다운로드
 document.getElementById('downloadBtn').addEventListener('click', () => {
-    // 캡처 전에 스크롤을 최상단으로 (혹시 모를 잘림 방지)
     window.scrollTo(0,0);
-    
     html2canvas(captureTarget, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: "#f8f9fa" // 투명 배경 방지
+        backgroundColor: "#f8f9fa"
     }).then(canvas => {
         const link = document.createElement('a');
         link.download = 'phoning-notice-card.jpg';

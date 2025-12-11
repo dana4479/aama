@@ -15,16 +15,21 @@
         <div class="controls">
             <div class="header-area">
                 <h1>📱 Phoning 스타일 에디터</h1>
-                <p>소제목 그라데이션 & 제목 크기 조절 기능 추가됨</p>
+                <p>NewJeans Phoning 앱 스타일의 공지사항 만들기</p>
             </div>
 
             <div class="global-settings">
-                <h3>1. 메인 타이틀 설정</h3>
+                <h3>1. 메인 타이틀 & 디자인 설정</h3>
                 <input type="text" id="mainTitleInput" placeholder="예: 국서 안내" value="국서 안내">
                 
                 <div class="slider-group">
-                    <label>글자 크기 조절 <span id="sizeValue">(2.8rem)</span></label>
+                    <label>메인 타이틀 크기 <span id="titleSizeValue">(2.8rem)</span></label>
                     <input type="range" id="titleSize" min="1.0" max="5.0" step="0.1" value="2.8">
+                </div>
+
+                <div class="slider-group">
+                    <label>소제목(부서명) 크기 <span id="subTitleSizeValue">(1.1rem)</span></label>
+                    <input type="range" id="subTitleSize" min="0.8" max="3.0" step="0.1" value="1.1">
                 </div>
 
                 <div class="color-pickers">
@@ -51,12 +56,11 @@
                 <div id="captureTarget" class="card-preview">
                     
                     <h1 id="renderMainTitle" class="main-title">국서 안내</h1>
-
                     <div id="renderArea" class="render-area"></div>
                     
                 </div>
             </div>
-            <p class="preview-note">* 내용이 많아지면 이미지가 길어집니다.</p>
+            <p class="preview-note">* 내용이 많으면 스크롤하여 확인하세요. (저장은 전체 다 됩니다)</p>
         </div>
 
     </div>

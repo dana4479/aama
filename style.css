@@ -1,192 +1,176 @@
+/* 폰트: Pretendard */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
     font-family: 'Pretendard', sans-serif;
-    background-color: #f0f2f5;
+    background-color: #222;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    padding: 20px;
-    overflow: hidden; /* 전체 스크롤 방지 */
-}
-
-.main-container {
-    display: flex;
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-    max-width: 1400px;
-    width: 100%;
-    height: 95vh;
     overflow: hidden;
 }
 
+.layout-container {
+    display: flex;
+    width: 95%;
+    max-width: 1600px;
+    height: 92vh;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
 /* --- 왼쪽 에디터 --- */
-.controls {
-    flex: 0 0 420px; /* 너비 고정 */
-    padding: 35px;
+.editor-sidebar {
+    flex: 0 0 420px;
+    background: #fff;
+    padding: 30px;
     border-right: 1px solid #eee;
-    overflow-y: auto; /* 세로 스크롤 */
     display: flex;
     flex-direction: column;
-    background: #fff;
-    z-index: 10;
+    overflow-y: auto;
 }
 
-.header-area h1 { font-size: 1.5rem; color: #111; margin-bottom: 5px; }
-.header-area p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+.brand-header h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 5px; }
+.brand-header p { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
 
-.global-settings h3, .list-header h3 { font-size: 1rem; color: #333; margin-bottom: 15px; font-weight: 700; }
+.control-group { margin-bottom: 25px; }
+.control-group h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: #333; }
 
-.input-group, .slider-group { margin-bottom: 15px; }
-.input-group label, .slider-group label { display: block; font-size: 0.85rem; color: #666; margin-bottom: 6px; font-weight: 600; }
-.input-group input[type="text"] {
-    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
-    font-size: 1rem; font-weight: bold; transition: border 0.2s;
-}
-.input-group input:focus { border-color: #0021b0; outline: none; }
-.slider-group input[type="range"] { width: 100%; cursor: pointer; }
+.color-picker-wrapper { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 12px; }
+input[type="color"] { border: none; width: 40px; height: 40px; cursor: pointer; background: none; }
+.color-label { font-size: 0.9rem; color: #555; font-weight: 600; }
 
-.divider { border: 0; height: 1px; background: #eee; margin: 25px 0; }
+.full-width-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 10px; }
+.slider-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.9rem; color: #666; font-weight: 600; }
+.slider-row input { flex: 1; cursor: pointer; }
 
-.list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.add-btn {
-    padding: 8px 16px; background: #e3f2fd; color: #1565c0;
-    border: none; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem;
-}
-.add-btn:hover { background: #bbdefb; }
+.divider { border: 0; height: 1px; background: #eee; margin: 20px 0; }
 
-/* 리스트 아이템 디자인 */
-.input-item {
-    background: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px;
-    position: relative; transition: box-shadow 0.2s;
-}
-.input-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-.remove-btn {
-    position: absolute; top: 15px; right: 15px;
-    background: white; border: 1px solid #ffcdd2; color: #e53935;
-    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-}
+.group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.btn-add { background: #e3f2fd; color: #1565c0; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer; }
 
-.input-item label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 4px; margin-top: 10px; }
-.input-item label:first-child { margin-top: 0; }
-.input-item input, .input-item textarea {
-    width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;
-    font-size: 0.95rem; font-family: inherit;
-}
-.input-item textarea { resize: vertical; min-height: 80px; }
+/* 입력 아이템 카드 */
+.input-card { background: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 12px; position: relative; }
+.input-card input, .input-card textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; font-family: inherit; font-size: 0.9rem; }
+.input-card label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 4px; font-weight: 600; }
+.btn-remove { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; background: #ffcdd2; color: #d32f2f; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
 
-.download-btn {
-    margin-top: auto; width: 100%; padding: 18px; background: #111; color: white;
-    border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.1s;
-}
-.download-btn:active { transform: scale(0.98); }
+.btn-download { margin-top: auto; padding: 18px; background: #111; color: #fff; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+.btn-download:hover { background: #333; }
 
 /* --- 오른쪽 미리보기 --- */
-.preview-area {
+.preview-section {
     flex: 1;
-    background: #e9ecef;
-    padding: 40px;
+    background: #e5e5e5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto; /* 스크롤 허용 */
+    justify-content: center;
+    padding: 40px;
+    overflow: hidden;
 }
 
-.card-preview {
-    width: 540px; /* 1080px의 절반 */
-    min-height: 675px; /* 1350px의 절반 */
-    height: auto;
-    background-color: #f8f9fa; /* 배경색 */
-    padding: 50px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+.preview-canvas-wrapper {
+    height: 100%;
+    aspect-ratio: 4 / 5; /* 인스타 비율 */
+    max-height: 850px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    border-radius: 0; /* 캔버스 자체는 각지게 (저장 시 깔끔) */
+    overflow: hidden;
+}
+
+/* =========================================
+   [핵심 디자인] NewJeans Phoning Style
+   ========================================= */
+.phoning-card {
+    width: 100%;
+    height: 100%;
+    /* 배경 그라데이션 (JS에서 제어) */
+    background: linear-gradient(180deg, #ffffff 0%, #b9fbc0 100%);
+    padding: 50px 40px;
     display: flex;
     flex-direction: column;
-    position: relative;
-    /* 중요: 캡처 시 잘림 방지 */
-    overflow: visible; 
+    overflow-y: auto; /* 내용 많으면 스크롤 */
 }
+.phoning-card::-webkit-scrollbar { display: none; }
 
-/* 메인 타이틀 */
-.main-title {
-    font-weight: 800;
-    color: #0021b0;
-    margin-bottom: 40px;
+.card-title {
+    font-size: 3rem; /* JS 제어 */
+    font-weight: 300; /* 얇은 폰트 느낌 */
+    color: #111;
+    margin-bottom: 50px;
     letter-spacing: -1px;
-    line-height: 1.2;
-    /* font-size는 JS로 제어 */
 }
 
-/* 렌더링 영역 */
-.render-area {
+.card-list {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    flex: 1;
+    /* 겹침 효과를 위해 gap을 넉넉히 주되, margin으로 조정 */
+    gap: 30px; 
 }
 
-.section-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: left;
+.card-item {
+    position: relative;
+    padding-top: 10px; /* 스티커 공간 확보 */
 }
 
-/* [Phoning 스타일 핵심] 소제목 그라데이션 박스 */
-.section-header-box {
-    display: inline-block;
-    align-self: flex-start;
-    /* 진한 하늘색 그라데이션 */
-    background: linear-gradient(90deg, #b3e5fc 0%, #ffffff 90%);
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.03);
+/* 1. 알약 스티커 (소제목) */
+.sticker {
+    position: absolute;
+    top: -8px; /* 박스 위로 튀어나오게 */
+    left: 20px; /* 왼쪽 정렬 */
+    z-index: 10; /* 박스 위로 */
     
-    font-weight: 700;
-    color: #222;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px; /* 완벽한 알약 모양 */
+    border: 1.5px solid #000; /* 검은 테두리 */
+    
+    /* 그라데이션 배경 (JS 제어) */
+    background: linear-gradient(180deg, #b9fbc0 0%, #ffffff 100%);
+    
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #000;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.15); /* 입체감 그림자 */
 }
 
-/* [Phoning 스타일 핵심] 내용 박스 */
-.section-content-box {
-    background: white;
-    border: 1.5px solid #222; /* 검은 테두리 */
+/* 2. 내용 박스 */
+.content-box {
+    background: #fdfdfd; /* 아주 연한 회색/흰색 */
+    border: 1.5px solid #000; /* 검은 테두리 */
     border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.06); /* 입체감 */
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    padding: 25px;
+    padding-top: 30px; /* 스티커 안 가리게 */
+    
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* 부드러운 그림자 */
+    min-height: 80px;
 }
 
-.box-desc {
+.content-text {
     font-size: 1rem;
     font-weight: 600;
-    color: #333;
-    line-height: 1.4;
-    white-space: pre-wrap; /* 줄바꿈 허용 */
+    color: #222;
+    line-height: 1.5;
+    white-space: pre-wrap; /* 줄바꿈 반영 */
+    text-align: center; /* 텍스트 가운데 정렬 (참고 이미지 스타일) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
-.box-list {
-    margin: 0; padding: 0; list-style: none; margin-top: 5px;
-}
-.box-list li {
-    font-size: 0.95rem; color: #555; line-height: 1.5;
-    position: relative; padding-left: 10px; margin-bottom: 3px;
-}
-.box-list li::before {
-    content: "-"; position: absolute; left: 0; color: #888;
-}
+.info-text { margin-top: 15px; color: #666; font-size: 0.85rem; }
 
-.preview-info { margin-top: 15px; color: #888; font-size: 0.85rem; }
-
-/* 모바일 반응형 */
-@media (max-width: 960px) {
-    .main-container { flex-direction: column; height: auto; overflow: visible; }
-    .controls { flex: none; width: 100%; border-right: none; border-bottom: 1px solid #eee; height: auto; }
-    .card-preview { width: 100%; aspect-ratio: 4/5; min-height: auto; padding: 30px; }
+/* 모바일 대응 */
+@media (max-width: 900px) {
+    .layout-container { flex-direction: column; height: auto; overflow: visible; }
+    .editor-sidebar { flex: none; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #eee; }
+    .preview-section { padding: 20px; }
+    .preview-canvas-wrapper { width: 100%; height: auto; aspect-ratio: 4/5; }
 }

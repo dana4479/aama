@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인스타 카드뉴스 메이커</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div class="controls">
+            <h1>🎨 카드뉴스 만들기</h1>
+            
+            <div class="input-group">
+                <label>제목 입력</label>
+                <input type="text" id="inputTitle" placeholder="제목을 입력하세요" value="제목이 들어갑니다">
+            </div>
+
+            <div class="input-group">
+                <label>내용 입력</label>
+                <textarea id="inputContent" rows="4" placeholder="내용을 입력하세요">여기에 카드뉴스의 핵심 내용을 적어주세요. 텍스트를 입력하면 오른쪽에서 바로 확인하고 다운로드할 수 있습니다.</textarea>
+            </div>
+
+            <div class="input-group">
+                <label>배경 이미지 업로드 (선택)</label>
+                <input type="file" id="bgInput" accept="image/*">
+            </div>
+
+            <div class="color-options">
+                <div class="input-group">
+                    <label>배경색</label>
+                    <input type="color" id="bgColor" value="#ffdd57">
+                </div>
+                <div class="input-group">
+                    <label>글자색</label>
+                    <input type="color" id="textColor" value="#333333">
+                </div>
+            </div>
+
+            <button id="downloadBtn" class="download-btn">⬇️ 이미지로 저장하기 (JPG)</button>
+        </div>
+
+        <div class="preview-area">
+            <div id="captureTarget" class="card-preview">
+                <div class="card-overlay"></div> <div class="card-text">
+                    <h1 id="displayTitle">제목이 들어갑니다</h1>
+                    <p id="displayContent">여기에 카드뉴스의 핵심 내용을 적어주세요. 텍스트를 입력하면 오른쪽에서 바로 확인하고 다운로드할 수 있습니다.</p>
+                </div>
+            </div>
+            <p class="preview-note">* 위 이미지가 1080x1080 사이즈로 저장됩니다.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM 요소 가져오기
+        const inputTitle = document.getElementById('inputTitle');
+        const inputContent = document.getElementById('inputContent');
+        const bgInput = document.getElementById('bgInput');
+        const bgColor = document.getElementById('bgColor');
+        const textColor = document.getElementById('textColor');
+        
+        const displayTitle = document.getElementById('displayTitle');
+        const displayContent = document.getElementById('displayContent');
+        const captureTarget = document.getElementById('captureTarget');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // 1. 실시간 텍스트 반영
+        inputTitle.addEventListener('input', (e) => displayTitle.innerText = e.target.value);
+        inputContent.addEventListener('input', (e) => displayContent.innerText = e.target.value);
+
+        // 2. 색상 변경
+        bgColor.addEventListener('input', (e) => {
+            captureTarget.style.background = e.target.value;
+            captureTarget.style.backgroundImage = 'none'; // 색상 선택 시 이미지는 제거
+        });
+        textColor.addEventListener('input', (e) => captureTarget.style.color = e.target.value);
+
+        // 3. 배경 이미지 업로드 처리
+        bgInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    captureTarget.style.backgroundImage = `url(${e.target.result})`;
+                    captureTarget.style.backgroundSize = 'cover';
+                    captureTarget.style.backgroundPosition = 'center';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 4. 이미지 다운로드 기능 (핵심!)
+        downloadBtn.addEventListener('click', () => {
+            // html2canvas로 캡처
+            html2canvas(captureTarget, {
+                scale: 2, // 해상도 2배 (고화질)
+                backgroundColor: null // 투명 배경 방지
+            }).then(canvas => {
+                // 캔버스를 이미지 링크로 변환
+                const link = document.createElement('a');
+                link.download = 'my-card-news.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.9); // JPG 포맷, 품질 0.9
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>

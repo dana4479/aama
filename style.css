@@ -1,0 +1,135 @@
+/* 기본 설정 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* 전체 레이아웃 */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    overflow: hidden;
+    max-width: 1100px;
+    width: 100%;
+}
+
+/* 왼쪽 컨트롤 패널 */
+.controls {
+    flex: 1;
+    min-width: 320px;
+    padding: 40px;
+    background: #fff;
+    border-right: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.controls h1 { font-size: 1.8rem; margin-bottom: 5px; color: #111; }
+.subtitle { font-size: 0.95rem; color: #666; margin-bottom: 30px; }
+
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: #333; }
+.input-group input[type="text"], 
+.input-group textarea,
+.input-group input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.input-group input:focus, .input-group textarea:focus { border-color: #0095f6; outline: none; }
+.input-group textarea { resize: none; height: 120px; }
+
+.color-options { display: flex; gap: 15px; margin-bottom: 10px; }
+.color-options .input-group { flex: 1; }
+.color-options input[type="color"] { width: 100%; height: 50px; padding: 5px; cursor: pointer; background: white; }
+
+.download-btn {
+    margin-top: auto; /* 버튼을 하단으로 밀기 */
+    width: 100%;
+    padding: 18px;
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.download-btn:hover { background-color: #0077c9; }
+
+/* 오른쪽 미리보기 영역 */
+.preview-area {
+    flex: 1.4;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    min-width: 360px;
+}
+.preview-wrapper {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* --- [Change!] 실제 캡처될 카드 (4:5 비율) --- */
+.card-preview {
+    width: 540px;  /* 1080의 절반 */
+    height: 675px; /* 1350의 절반 (4:5 비율 맞춤) */
+    background-color: #f0f2f5;
+    /* 텍스트 배치 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;     /* 중앙 정렬 */
+    padding: 50px;
+    text-align: center;
+    word-break: keep-all;
+}
+
+/* 텍스트 스타일 */
+.card-text h1 {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+    line-height: 1.3;
+    font-weight: 800;
+}
+.card-text p {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    white-space: pre-wrap; /* 줄바꿈 보존 */
+}
+
+.preview-note {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* 모바일 대응 */
+@media (max-width: 900px) {
+    .main-container { flex-direction: column; border-radius: 0; height: auto; }
+    .controls { border-right: none; border-bottom: 1px solid #eee; padding: 30px; }
+    .preview-area { padding: 30px 20px; }
+    /* [Change!] 모바일에서 비율 유지 */
+    .card-preview { width: 100%; height: auto; aspect-ratio: 4 / 5; }
+    .card-text h1 { font-size: 2rem; }
+    .card-text p { font-size: 1.1rem; }
+}
